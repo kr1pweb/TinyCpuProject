@@ -66,10 +66,10 @@ The executable will be generated in `releases/main`.
 ./releases/main --asm program.asm
 ```
 ```bash
-./releases/main --bin output.bin
+./releases/main --bin bin/program.bin
 ```
 ```bash
-./releases/main --compile program.asm -o output.bin
+./releases/main --compile program.asm -o bin/program.bin
 ```
 ---
 
