@@ -1,102 +1,82 @@
-```markdown
-# TinyCpuProject
+# TinyCppU
 
-Un projet d’émulation de CPU minimaliste avec un assembleur personnalisé.  
-Le projet inclut :  
-
-- Un **CPU 4-bit** en C++ (`TinyCpu`) capable d’exécuter un ensemble limité d’instructions.  
-- Un **assembleur en C++** et un équivalent en Python pour générer des fichiers binaires à partir de fichiers ASM.  
-- Une structure de projet claire avec CMake pour la compilation et un répertoire Python pour les scripts auxiliaires.  
-
+A minimalist CPU emulation project with a custom assembler
+The project includes : 
+ 
+- A **4-bit CPU** in C++ (`TinyCpu`) capable of executing a limited set of instructions.  
+- A **C++ assembler** for generating binaries from ASM files.
+ 
 ---
 
-## Structure du projet
+## Project structure
 
 ```
-
-D#/
-├── src/                       # Code source C++
-│   ├── main.cpp
-│   ├── TinyCpu/
-│   │   ├── TinyCpu.cpp
-│   │   └── TinyCpu.hpp
-│   └── Assembler/
-│       ├── Assembler.cpp
-│       └── OpCodes/
-│           ├── OpCodes.cpp
-│           └── OpCodes.h
-├── python/                     # Scripts Python (assembleur)
-├── bin/                        # Binaries générés par Python
-├── releases/                   # Exécutables compilés C++
-├── build/                      # Fichiers CMake générés
-├── program.asm                 # Exemple de programme ASM
-├── output.bin                  # Exemple de binaire généré
-└── CMakeLists.txt              # Build configuration
-
+src
+├── Assembler
+│   ├── Assembler.cpp
+│   ├── Assembler.hpp
+│   └── OpCodes
+│       ├── OpCodes.cpp
+│       └── OpCodes.h
+├── main.cpp
+└── TinyCpu
+    ├── TinyCpu.cpp
+    └── TinyCpu.hpp
 ````
 
 ---
 
-## Compilation C++
+## C++ usage
 
-Le projet utilise **CMake** pour gérer la compilation.  
+You can load the program from C++ with (`cpu.loadProgram`) :
+```cpp
+auto program = cpu.loadProgram({
+    0x50,
+    0x13,
+    ...
+    0xF0
+});
+```
+You can also load the program from an external file with (`cpu.loadFromFile`) :
+```cpp
+auto program = cpu.loadFromFile("filepath.bin");
+```
+Or load it from an external file in `asm` using (`assemble`) from "Assembler/Assembler.hpp" :
+```cpp
+auto program = assemble("filepath.asm");
+```
+To run the program you can use (`cpu.run`) after loading the program.
+
+---
+## C++ compilation
+
+The project uses **CMake** to manage compilation
 
 ```bash
-mkdir -p build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build .
 ````
 
-L’exécutable sera généré dans `releases/main`.
+The executable will be generated in `releases/main`.
 
-### Modes de lancement
+### Launch modes
 
 ```bash
-# Charger un fichier ASM, assembler et exécuter
 ./releases/main --asm program.asm
-
-# Charger un fichier binaire existant et exécuter
+```
+```bash
 ./releases/main --bin output.bin
-
-# Compiler un fichier ASM en binaire
+```
+```bash
 ./releases/main --compile program.asm -o output.bin
 ```
-
----
-
-## Assembleur Python (optionnel)
-
-Le projet contient également un assembleur Python pour générer des fichiers binaires `.bin` depuis un `.asm`.
-
-```bash
-cd python
-python3 main.py
-```
-
-Le binaire généré sera dans `bin/program.bin`.
-
----
-
-## Contribuer
-
-1. Ajouter ou modifier des instructions dans `OpCodes.h` / `Opcodes.py`.
-2. Écrire des programmes ASM dans `program.asm`.
-3. Compiler le CPU avec CMake et tester les programmes.
-
 ---
 
 ## Notes
 
-* Le CPU est un simple exemple 4-bit avec registre A, B et une RAM limitée.
-* L’assembleur supporte des commentaires avec `;`.
-* Les fichiers binaires sont au format simple byte par instruction.
-
-```
+* The CPU is a simple 4-bit example with registers A and B and limited RAM.
+* The assembler supports comments with `;`.
+* Binary files are in single byte per instruction format.
 
 ---
-
-Si tu veux, je peux te pondre **une version encore plus “pro” avec badges CMake, build status et instructions Python + C++ combinées**, façon repo GitHub prêt à cloner.  
-
-Veux que je fasse ça ?
-```
